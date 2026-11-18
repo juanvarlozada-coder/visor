@@ -53,12 +53,12 @@ impl Window {
             "win.actual",
         ));
         bar.append(&icon_button(
-            "object-rotate-left-symbolic",
+            "edit-undo-symbolic",
             "Rotar a la izquierda",
             "win.rotate-left",
         ));
         bar.append(&icon_button(
-            "object-rotate-right-symbolic",
+            "edit-redo-symbolic",
             "Rotar a la derecha",
             "win.rotate-right",
         ));

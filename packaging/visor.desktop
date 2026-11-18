@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Visor
+GenericName=Visor de imágenes
+Comment=Visor de imágenes minimalista para GNOME
+Exec=visor %f
+Icon=visor
+Terminal=false
+Categories=Graphics;Viewer;
+Keywords=image;viewer;imagen;foto;picture;
+StartupNotify=true
+StartupWMClass=io.github.visor.Images
+MimeType=image/png;image/jpeg;image/gif;image/webp;image/bmp;image/tiff;image/x-icon;

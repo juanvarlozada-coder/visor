@@ -36,4 +36,14 @@ cargo build --release
 
 Requiere GTK 4.10+ y libadwaita 1.4+.
 
+## AppImage
+
+```sh
+bash packaging/build-appimage.sh
+./dist/Visor-x86_64.AppImage ruta/a/imagen.png
+```
+
+El script descarga `linuxdeploy` y `appimagetool` (en `/tmp/visor-appimage-tools`),
+empaqueta GTK4, libadwaita, los esquemas de GLib y los iconos de la interfaz.
+
 ![Captura](docs/screenshot.png)
