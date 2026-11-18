@@ -1,0 +1,19 @@
+[package]
+name = "visor"
+version = "0.1.0"
+edition = "2024"
+description = "Visor de imágenes minimalista para GNOME"
+license = "MIT"
+
+[dependencies]
+gtk = { package = "gtk4", version = "0.11", features = ["v4_10"] }
+adw = { package = "libadwaita", version = "0.9", features = ["v1_4"] }
+image = { version = "0.25", default-features = false, features = [
+    "png",
+    "jpeg",
+    "gif",
+    "webp",
+    "bmp",
+    "tiff",
+    "ico",
+] }
