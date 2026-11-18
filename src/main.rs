@@ -16,6 +16,12 @@ const CSS: &str = "
     background-color: alpha(black, 0.62);
     box-shadow: 0 4px 14px alpha(black, 0.35);
 }
+.viewer-bar,
+.viewer-bar button,
+.viewer-zoom,
+.viewer-nav {
+    color: #ffffff;
+}
 .viewer-bar button {
     min-width: 32px;
     min-height: 32px;

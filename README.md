@@ -36,6 +36,12 @@ cargo build --release
 
 Requiere GTK 4.10+ y libadwaita 1.4+.
 
+## Descargas
+
+- **Linux x86_64**: `Visor-x86_64.AppImage` (chmod +x y ejecutar).
+- **Windows 10/11 x64**: `Visor-0.2.0-windows-x64.zip`; extraer y ejecutar
+  `bin\visor.exe`.
+
 ## AppImage
 
 ```sh
@@ -45,5 +51,16 @@ bash packaging/build-appimage.sh
 
 El script descarga `linuxdeploy` y `appimagetool` (en `/tmp/visor-appimage-tools`),
 empaqueta GTK4, libadwaita, los esquemas de GLib y los iconos de la interfaz.
+
+## Windows
+
+```sh
+bash packaging/build-windows.sh
+```
+
+Compila con `cargo xwin` (target MSVC, CRT estático) contra el runtime GTK4 de
+gvsbuild, resuelve las DLLs necesarias y genera
+`dist/Visor-<versión>-windows-x64.zip` con `bin/visor.exe`, `share/` y los
+loaders de gdk-pixbuf. Probado bajo Wine.
 
 ![Captura](docs/screenshot.png)
