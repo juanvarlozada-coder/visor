@@ -1,0 +1,9 @@
+{
+  "id": "carousel",
+  "name": "Carrusel",
+  "version": "1.0.0",
+  "author": "juanvarlozada-coder",
+  "description": "Cambia de foto con una animación de carrusel.",
+  "api": 1,
+  "entry": "main.lua"
+}

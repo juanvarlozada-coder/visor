@@ -13,6 +13,8 @@ solo íconos.
 - Zoom con rueda del ratón, paneo arrastrando, ajustar a la ventana y tamaño real.
 - Rotación en pasos de 90°, pantalla completa y tema claro/oscuro automático.
 - Formatos: PNG, JPEG, GIF, WebP, BMP, TIFF e ICO.
+- **Plugins**: zoom suave, carrusel y cualquier plugin de GitHub, instalable
+  desde la tienda con un clic.
 
 ## Atajos
 
@@ -24,6 +26,7 @@ solo íconos.
 | `Ctrl+0` | Ajustar a la ventana |
 | `Ctrl+1` | Tamaño real (100 %) |
 | `R` / `Shift+R` | Rotar a la derecha / izquierda |
+| `Ctrl+P` | Tienda de plugins |
 | `F11` | Pantalla completa |
 | `Esc` | Salir de pantalla completa / cerrar |
 
@@ -34,12 +37,12 @@ cargo build --release
 ./target/release/visor ruta/a/imagen.png
 ```
 
-Requiere GTK 4.10+ y libadwaita 1.4+.
+Requiere GTK 4.10+ y libadwaita 1.5+.
 
 ## Descargas
 
 - **Linux x86_64**: `Visor-x86_64.AppImage` (chmod +x y ejecutar).
-- **Windows 10/11 x64**: `Visor-0.2.0-windows-x64.zip`; extraer y ejecutar
+- **Windows 10/11 x64**: `Visor-0.3.0-windows-x64.zip`; extraer y ejecutar
   `bin\visor.exe`.
 
 ## AppImage
@@ -62,5 +65,16 @@ Compila con `cargo xwin` (target MSVC, CRT estático) contra el runtime GTK4 de
 gvsbuild, resuelve las DLLs necesarias y genera
 `dist/Visor-<versión>-windows-x64.zip` con `bin/visor.exe`, `share/` y los
 loaders de gdk-pixbuf. Probado bajo Wine.
+
+## Plugins
+
+El visor funciona igual sin plugins: no se carga nada hasta que actives uno.
+Abre la tienda con `Ctrl+P` para instalar los oficiales con un clic:
+
+- **Zoom suave**: la rueda fija un objetivo y el zoom se interpola por frames.
+- **Carrusel**: cambia de foto deslizando la imagen anterior fuera de pantalla.
+
+También puedes instalar plugins de terceros pegando la URL de su repositorio de
+GitHub. Consulta [PLUGINS.md](PLUGINS.md) para el formato y la API.
 
 ![Captura](docs/screenshot.png)

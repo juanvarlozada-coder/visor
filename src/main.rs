@@ -1,5 +1,6 @@
 mod canvas;
 mod loader;
+mod plugins;
 mod window;
 
 use gtk::gdk;

@@ -1,5 +1,6 @@
 use crate::canvas::Canvas;
 use crate::loader;
+use crate::plugins::runtime::PluginManager;
 use adw::prelude::*;
 use gtk::{gdk, gio};
 use std::cell::{Cell, RefCell};
@@ -11,7 +12,8 @@ pub struct Window {
     canvas: Canvas,
     toolbar: adw::ToolbarView,
     title: adw::WindowTitle,
-    toast: adw::ToastOverlay,
+    pub(crate) toast: adw::ToastOverlay,
+    pub(crate) plugins: PluginManager,
     prev: gtk::Button,
     next: gtk::Button,
     empty: gtk::Box,
@@ -109,6 +111,11 @@ impl Window {
             "Pantalla completa (F11)",
             "win.fullscreen",
         ));
+        header.pack_end(&icon_button(
+            "application-x-addon-symbolic",
+            "Plugins (Ctrl+P)",
+            "win.plugins",
+        ));
 
         let toolbar = adw::ToolbarView::new();
         toolbar.add_top_bar(&header);
@@ -124,12 +131,15 @@ impl Window {
             .content(&toast)
             .build();
 
+        let plugins = PluginManager::new(canvas.clone());
+
         let view = Rc::new(Self {
             window,
             canvas,
             toolbar,
             title,
             toast,
+            plugins,
             prev,
             next,
             empty,
@@ -141,6 +151,31 @@ impl Window {
 
         view.install_actions(app);
         view.install_drop_target();
+
+        {
+            let weak = Rc::downgrade(&view);
+            view.plugins.set_navigate(move |delta| {
+                if let Some(view) = weak.upgrade() {
+                    view.advance(delta as isize);
+                }
+            });
+        }
+        {
+            let weak = Rc::downgrade(&view);
+            view.canvas.set_on_scroll(move |dy| {
+                weak.upgrade()
+                    .map(|view| view.plugins.on_scroll(dy))
+                    .unwrap_or(false)
+            });
+        }
+        {
+            let weak = Rc::downgrade(&view);
+            view.canvas.set_on_frame(move |dt| {
+                weak.upgrade()
+                    .map(|view| view.plugins.on_frame(dt))
+                    .unwrap_or(false)
+            });
+        }
 
         let label = zoom_label.downgrade();
         view.canvas.on_zoom_changed(move |zoom| {
@@ -189,6 +224,7 @@ impl Window {
         self.action("rotate-left", |view| view.canvas.rotate(-90.0));
         self.action("rotate-right", |view| view.canvas.rotate(90.0));
         self.action("fullscreen", |view| view.toggle_fullscreen());
+        self.action("plugins", |view| view.open_plugins());
         self.action("escape", |view| view.escape());
 
         const ACCELS: &[(&str, &[&str])] = &[
@@ -202,6 +238,7 @@ impl Window {
             ("rotate-left", &["<Shift>r"]),
             ("rotate-right", &["r"]),
             ("fullscreen", &["F11"]),
+            ("plugins", &["<Control>p"]),
             ("escape", &["Escape"]),
         ];
 
@@ -265,12 +302,20 @@ impl Window {
     }
 
     fn step(self: &Rc<Self>, delta: isize) {
+        if !self.plugins.on_navigate(delta as i32) {
+            self.advance(delta);
+        }
+    }
+
+    /// Cambia de imagen sin volver a consultar a los plugins.
+    fn advance(self: &Rc<Self>, delta: isize) {
         let len = self.files.borrow().len();
         if len < 2 {
             return;
         }
 
         let index = (self.index.get() as isize + delta).rem_euclid(len as isize) as usize;
+        self.canvas.set_slide_direction(delta as i32);
         self.show(index);
     }
 

@@ -40,6 +40,12 @@ ARCH=x86_64 \
         --icon-file "$ROOT/packaging/visor.png" \
         --plugin gtk
 
+# libadwaita elige el tema por su cuenta: forzar GTK_THEME rompe sus estilos.
+HOOK="$APPDIR/apprun-hooks/linuxdeploy-plugin-gtk.sh"
+if [[ -f "$HOOK" ]]; then
+    sed -i '/^export GTK_THEME=/d' "$HOOK"
+fi
+
 # Iconos simbólicos usados por la interfaz, copiados a hicolor para que el
 # AppImage no dependa del tema de iconos del sistema anfitrión.
 ICONS="$APPDIR/usr/share/icons/hicolor/scalable/actions"
@@ -58,12 +64,16 @@ cp "$SOURCE_ICONS/ui/window-minimize-symbolic.svg" "$ICONS/" 2>/dev/null || true
 cp "$SOURCE_ICONS/ui/window-restore-symbolic.svg" "$ICONS/" 2>/dev/null || true
 cp "$SOURCE_ICONS/mimetypes/image-x-generic-symbolic.svg" \
     "$APPDIR/usr/share/icons/hicolor/scalable/mimetypes/" 2>/dev/null || true
+cp "$SOURCE_ICONS/mimetypes/application-x-addon-symbolic.svg" \
+    "$APPDIR/usr/share/icons/hicolor/scalable/mimetypes/" 2>/dev/null || true
+cp "$SOURCE_ICONS/places/user-trash-symbolic.svg" "$ICONS/" 2>/dev/null || true
+cp "$SOURCE_ICONS/status/dialog-warning-symbolic.svg" "$ICONS/" 2>/dev/null || true
 
 rm -f "$DIST"/*.AppImage
 PATH="$TOOLS:$PATH" \
 APPIMAGE_EXTRACT_AND_RUN=1 \
 ARCH=x86_64 \
-VERSION=0.1.0 \
+VERSION="${VISOR_VERSION:-0.3.0}" \
     "$TOOLS/appimagetool" "$APPDIR" "$DIST/Visor-x86_64.AppImage"
 
 ls -lh "$DIST"

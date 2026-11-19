@@ -1,0 +1,9 @@
+{
+  "id": "smooth-zoom",
+  "name": "Zoom suave",
+  "version": "1.0.0",
+  "author": "juanvarlozada-coder",
+  "description": "Zoom animado y fluido con la rueda del ratón.",
+  "api": 1,
+  "entry": "main.lua"
+}
